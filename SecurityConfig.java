@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,17 +12,21 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                    .requestMatchers("/").permitAll() // Allow access to the root URL without authentication
+                    .requestMatchers("/").permitAll()
                     .anyRequest().authenticated()
             )
             .oauth2Login(oauth2Login ->
                 oauth2Login
-                    .loginPage("/oauth2/authorization/google")  // Refers to the registrationId 'google'
+                    .loginPage("/oauth2/authorization/google")
+                    .failureHandler(customAuthenticationFailureHandler)  // Use the custom failure handler
                     .userInfoEndpoint(userInfoEndpoint ->
                         userInfoEndpoint
                             .oidcUserService(this.oidcUserService())
@@ -31,7 +36,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public OidcUserService oidcUserService() {
+    OidcUserService oidcUserService() {
         return new OidcUserService();
     }
 }
