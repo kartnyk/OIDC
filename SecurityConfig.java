@@ -13,7 +13,7 @@ public class SecurityConfig {
         http
             .authorizeRequests(authorizeRequests ->
                 authorizeRequests
-                    .antMatchers("/login", "/resources/**", "/webjars/**").permitAll()
+                    .requestMatchers("/login", "/resources/**", "/webjars/**").permitAll()
                     .anyRequest().authenticated()
             )
             .oauth2Login(oauth2Login ->
