@@ -55,17 +55,35 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script>
-    function handleLogin(event) {
+    async function handleLogin(event) {
         event.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+        const usernameField = document.getElementById('username');
+        const passwordField = document.getElementById('password');
+        const username = usernameField.value;
+        const password = passwordField.value;
 
-        // Simulate a successful login
-        if (username && password) {
-            alert('Login successful');
-        } else {
-            alert('Login failed');
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            const message = await response.text();
+            if (response.ok) {
+                alert('Login successful: ' + message);
+            } else {
+                alert('Login failed: ' + message);
+            }
+        } catch (error) {
+            alert('Login failed: ' + error.message);
         }
+
+        // Re-enable and clear the fields
+        usernameField.value = '';
+        passwordField.value = '';
     }
 </script>
 
