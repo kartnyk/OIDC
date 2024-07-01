@@ -67,10 +67,14 @@
         const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
         const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
+        console.log('CSRF Token:', csrfToken); // Debug log
+        console.log('CSRF Header:', csrfHeader); // Debug log
+
         try {
-            const headers = new Headers();
-            headers.append('Content-Type', 'application/json');
-            headers.append(csrfHeader, csrfToken);
+            const headers = new Headers({
+                'Content-Type': 'application/json'
+            });
+            headers.set(csrfHeader, csrfToken);
 
             const response = await fetch('/api/auth/login', {
                 method: 'POST',
