@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/styles.css" rel="stylesheet"> <!-- Ensure your custom styles are loaded here -->
+    <link href="/css/styles.css" rel="stylesheet">
 </head>
 <body class="dashboard-body">
     <div class="dashboard-container mt-5">
@@ -15,15 +15,14 @@
             </div>
             <div class="dashboard-card-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6 d-flex flex-column align-items-center">
                         <h5>Profile Information</h5>
-                        <p><strong>Username:</strong> <span id="userName">Loading...</span></p>
-                        <p><strong>Email:</strong> <span id="userEmail">Loading...</span></p>
-                        <!-- Optionally display user picture -->
-                        <img id="userPicture" class="img-thumbnail" style="display: none;" alt="User Picture">
+                        <p><strong>Username:</strong> <span id="userName" class="profile-info">Loading...</span></p>
+                        <p><strong>Email:</strong> <span id="userEmail" class="profile-info">Loading...</span></p>
+                        <img id="userPicture" class="img-thumbnail mt-2" style="display: none;" alt="User Picture">
                     </div>
-                    <div class="col-md-6">
-                        <h5>Quick Actions</h5>
+                    <div class="col-md-6 d-flex flex-column align-items-center">
+                        <h5 class="text-right w-100">Quick Actions</h5>
                         <button class="btn btn-primary btn-block dashboard-button">View Profile</button>
                         <button class="btn btn-secondary btn-block dashboard-button">Settings</button>
                         <button class="btn btn-danger btn-block dashboard-button">Logout</button>
