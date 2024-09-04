@@ -23,3 +23,53 @@ body {
     background-color: #007bff;
     color: white;
 }
+
+
+# dashboard css , class names will be changed 
+
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    padding: 20px;
+    text-align: center;
+}
+
+.profile-info, .actions {
+    margin-top: 20px;
+}
+
+.profile-info p, .actions button {
+    margin: 10px 0;
+}
+
+.actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.actions button.logout {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.actions button.profile, .actions button.settings {
+    background-color: #3498db;
+    color: white;
+}
