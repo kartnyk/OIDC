@@ -29,47 +29,32 @@ body {
 
 /* styles.css */
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f4f8;
+/* Dashboard-specific styles */
+.dashboard-body {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
+    background-color: rgb(128, 0, 255);
 }
 
-.container {
-    background-color: white;
+.dashboard-container {
+    width: 100%;
+    max-width: 800px;
+}
+
+.dashboard-card {
+    width: 100%;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 400px;
-    padding: 20px;
-    text-align: center;
+    background-color: white;
 }
 
-.profile-info, .actions {
-    margin-top: 20px;
+.dashboard-card-header {
+    margin-bottom: 20px;
 }
 
-.profile-info p, .actions button {
-    margin: 10px 0;
-}
-
-.actions button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 10px;
-}
-
-.actions button.logout {
-    background-color: #e74c3c;
-    color: white;
-}
-
-.actions button.profile, .actions button.settings {
-    background-color: #3498db;
-    color: white;
+.dashboard-button {
+    margin-bottom: 10px;
 }
