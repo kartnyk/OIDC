@@ -6,7 +6,8 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Component;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import java.io.IOException;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -30,18 +31,38 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
             if (authorizedClient != null) {
                 String accessToken = authorizedClient.getAccessToken().getTokenValue();
 
+                // Log the token to make sure it's the correct one
+                System.out.println("Attempting to revoke token: " + accessToken);
+
                 // Send the revocation request to Google
-                URL url = new URL("https://oauth2.googleapis.com/revoke?token=" + accessToken);
+                URL url = new URL("https://oauth2.googleapis.com/revoke");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 conn.setDoOutput(true);
 
+                // Write the token to the request body
+                String urlParameters = "token=" + accessToken;
+                try (DataOutputStream out = new DataOutputStream(conn.getOutputStream())) {
+                    out.writeBytes(urlParameters);
+                    out.flush();
+                }
+
                 int responseCode = conn.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     System.out.println("Token revoked successfully.");
                 } else {
-                    System.out.println("Failed to revoke token.");
+                    System.out.println("Failed to revoke token. Response code: " + responseCode);
+                    
+                    // Log the error response
+                    try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getErrorStream()))) {
+                        String inputLine;
+                        StringBuilder responseText = new StringBuilder();
+                        while ((inputLine = in.readLine()) != null) {
+                            responseText.append(inputLine);
+                        }
+                        System.out.println("Error response from Google: " + responseText.toString());
+                    }
                 }
             }
         }
