@@ -25,7 +25,16 @@
                         <h5 class="text-right w-100">Quick Actions</h5>
                         <button class="btn btn-primary btn-block dashboard-button">View Profile</button>
                         <button class="btn btn-secondary btn-block dashboard-button">Settings</button>
-                        <button class="btn btn-danger btn-block dashboard-button">Logout</button>
+                        <button class="btn btn-danger btn-block dashboard-button" onclick="logout()">Logout</button>
+
+<script>
+  function logout() {
+      fetch('/logout', { method: 'POST' })
+          .then(() => window.location.href = '/login/oauth2')
+          .catch(err => console.error('Logout failed:', err));
+  }
+</script>
+
                     </div>
                 </div>
             </div>
