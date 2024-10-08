@@ -1,0 +1,22 @@
+public class UserMock {
+
+    public static User createMockUser() {
+        User user = new User();
+        user.setId(1L);
+        user.setAuthId("auth123");
+        user.setAppCode("APP001");
+        user.setEmailId("dummyuser@example.com");
+        user.setProvider("google");
+        user.setProviderId("provider123");
+        user.setAccessToken("dummyAccessToken");
+        user.setRefreshToken("dummyRefreshToken");
+        user.setTokenExpiry(new Timestamp(System.currentTimeMillis() + 3600 * 1000)); // 1 hour later
+        user.setIdToken("dummyIdToken");
+        user.setScope("openid profile email");
+        user.setEnabledFlg("Y");
+        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+        return user;
+    }
+}
