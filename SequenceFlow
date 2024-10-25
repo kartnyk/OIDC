@@ -1,0 +1,38 @@
+sequenceDiagram
+    participant User as User
+    participant Frontend as Frontend (Angular App)
+    participant Backend as Backend (Spring Boot)
+    participant GoogleAuth as Google Authorization Server
+    participant GoogleToken as Google Token Endpoint
+    participant GoogleUserInfo as Google User Info Endpoint
+    participant DSApp as DS App (Token Storage)
+
+    User ->> Frontend: Clicks "Login with Google"
+    Frontend ->> Backend: Request to start authorization (/oauth2/authorize/google)
+    Backend ->> GoogleAuth: Redirect user to Google's authorization URL
+    GoogleAuth ->> User: User logs in and authorizes
+
+    User ->> GoogleAuth: Provides authorization
+    GoogleAuth ->> Backend: Redirects back with authorization code (/oauth2/callback?code=AUTHORIZATION_CODE)
+
+    Backend ->> GoogleToken: Exchanges authorization code for tokens
+    GoogleToken ->> Backend: Responds with access and ID tokens
+
+    Backend ->> GoogleUserInfo: Verifies ID token with User Info Endpoint
+    GoogleUserInfo ->> Backend: Returns user information
+
+    Backend ->> DSApp: Sends Google token details for storage
+    DSApp ->> Backend: Acknowledgment of storage
+
+    Backend ->> Backend: Creates custom JWT token
+
+    Backend ->> Frontend: Redirects with custom JWT token information
+    Frontend ->> DSApp: Calls DS App for DS Login with custom JWT token (containing email)
+
+    DSApp ->> DSApp: Decodes token, extracts email, and checks user in DS database
+    alt User Exists in DS System
+        DSApp ->> Frontend: Responds with authentication success
+        Frontend ->> User: Redirects user to dashboard
+    else User Does Not Exist
+        DSApp ->> Frontend: Responds with authentication failure
+    end
