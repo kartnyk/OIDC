@@ -39,3 +39,34 @@ SP -> SP: Verify SAML Assertion\n(Signature, Audience, Issuer, Conditions, Recip
 SP -> User: Grant Access to PayPal
 
 @enduml
+
+
+
+@startuml
+actor User
+participant "AuthD (IdP)" as IdP
+participant "DPSAML" as DPSAML
+participant "PayPal (SP)" as SP
+
+== Service Provider (SP) Registration ==
+
+User -> IdP: Initiate SP Registration for PayPal
+IdP -> IdP: Generate Client ID and Client Secret for PayPal
+
+== Store Metadata and Credentials ==
+
+IdP -> IdP: Store PayPal metadata\n(Entity ID, ACS URL, Public Key)
+IdP -> IdP: Store Client ID and Client Secret for PayPal
+
+== Configure DPSAML Access ==
+
+IdP -> DPSAML: Register PayPal as SP\nwith DPSAML
+note right of DPSAML: Configure DPSAML to allow\nonly AuthD access for PayPal requests
+DPSAML -> IdP: Confirm Access Configuration
+
+== Completion of Registration ==
+
+IdP -> User: Provide Client ID and Secret to User\nfor PayPal (SP) setup
+User -> SP: Configure PayPal with Client ID and Client Secret
+
+@enduml
