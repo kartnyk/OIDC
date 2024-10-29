@@ -1,8 +1,8 @@
 @startuml
 actor User
 participant "AuthD (IdP)" as IdP
-participant "PayPal (SP)" as SP
 participant "DPSAML" as DPSAML
+participant "PayPal (SP)" as SP
 
 == User Login and SP Selection ==
 
