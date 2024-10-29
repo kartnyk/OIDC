@@ -56,7 +56,7 @@ IdP -> IdP: Generate Client ID and Client Secret for PayPal
 == Store Metadata and Credentials ==
 
 IdP -> IdP: Store PayPal metadata\n(Entity ID, ACS URL, Public Key)
-IdP -> IdP: Store Client ID and Client Secret for PayPal
+IdP -> IdP: Store Client ID and Client Secret\nfor PayPal in the database
 
 == Configure DPSAML Access ==
 
@@ -64,9 +64,16 @@ IdP -> DPSAML: Register PayPal as SP\nwith DPSAML
 note right of DPSAML: Configure DPSAML to allow\nonly AuthD access for PayPal requests
 DPSAML -> IdP: Confirm Access Configuration
 
+== Configure Client Credentials ==
+
+alt Configure in AuthD’s Config File
+    IdP -> IdP: Update AuthD configuration file\nwith PayPal's Client ID and Secret
+else Provide to User
+    IdP -> User: Provide Client ID and Secret\nfor configuring in PayPal (SP)
+end
+
 == Completion of Registration ==
 
-IdP -> User: Provide Client ID and Secret to User\nfor PayPal (SP) setup
 User -> SP: Configure PayPal with Client ID and Client Secret
 
 @enduml
