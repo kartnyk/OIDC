@@ -1,0 +1,41 @@
+@startuml
+actor User
+participant "PayPal (SP)" as SP
+participant "AuthD (IdP)" as IdP
+participant "DPSAML" as DPSAML
+
+== User Login and SP Selection ==
+
+User -> IdP: Access AuthD Portal and Login
+IdP -> IdP: Validate User Credentials
+
+User -> IdP: Select PayPal (SP) from AuthD Portal
+
+== Client ID and Secret Validation ==
+
+IdP -> IdP: Retrieve PayPal's client ID and client secret from config
+IdP -> IdP: Validate client ID and client secret\nagainst database entry for PayPal
+
+alt If Validation Fails
+    IdP -> User: Access Denied
+else If Validation Succeeds
+    IdP -> DPSAML: Request SAML Assertion for PayPal
+    note right of DPSAML: AuthD sends API key\nor mTLS certificate for authentication
+end
+
+== DPSAML Generates SAML Assertion ==
+
+DPSAML -> DPSAML: Validate API Key or mTLS certificate
+DPSAML -> IdP: Return signed SAML assertion for PayPal
+
+== Redirect to SP with SAML Assertion ==
+
+IdP -> User: Redirect to PayPal ACS URL\nwith SAML Assertion
+User -> SP: Access PayPal ACS URL\nwith SAML Assertion
+
+== PayPal Validates and Grants Access ==
+
+SP -> SP: Verify SAML Assertion\n(Signature, Audience, Issuer, Conditions, Recipient)
+SP -> User: Grant Access to PayPal
+
+@enduml
