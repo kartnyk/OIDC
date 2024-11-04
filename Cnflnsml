@@ -49,6 +49,13 @@ note left of User: User is redirected to SP\nwith the SAML Response
 User -> SP: Access SP with SAML Response
 
 SP -> SP: Validate SAML Response\n(Signature, Audience, Issuer, Conditions)
+alt If Assertion is Valid
+    SP -> User: Grant Access to Protected Resource
+else If Assertion is Invalid
+    SP -> User: Deny Access
+end
+
+@enduml
 
 Explanation of the General SAML Authentication Flow
 
