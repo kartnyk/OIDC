@@ -3,16 +3,26 @@ Here's a general PlantUML sequence diagram for a basic SAML authentication flow,
 PlantUML Code for General SAML Authentication Flow
 
 @startuml
-actor User
-participant "Service Provider (SP)" as SP
-participant "Identity Provider (IdP)" as IdP
+skinparam backgroundColor #F9F9F9
+skinparam shadowing true
+skinparam arrowColor #172B4D
+skinparam actorBorderColor #172B4D
+skinparam actorBackgroundColor #172B4D
+skinparam participantBorderColor #172B4D
+skinparam participantBackgroundColor #B3C3D3
+skinparam sequenceArrowThickness 2
+
+actor User #172B4D
+participant "Service Provider (SP)" as SP #B3C3D3
+participant "Identity Provider (IdP)" as IdP #B3C3D3
 
 == SP-Initiated SAML Authentication Flow ==
 
 User -> SP: Access Protected Resource
 SP -> IdP: Redirect User to IdP with AuthnRequest
+note right of IdP: IdP receives AuthnRequest\nfrom SP to authenticate user
 
-User -> IdP: Authenticate at IdP (e.g., login with username/password)
+User -> IdP: Authenticate at IdP\n(e.g., login with username/password)
 IdP -> IdP: Validate User Credentials
 IdP -> User: Redirect User back to SP with SAML Response
 
@@ -34,17 +44,11 @@ IdP -> IdP: Authenticate User
 User -> IdP: Select SP from IdP Portal
 
 IdP -> User: Redirect to SP with SAML Response
+note left of User: User is redirected to SP\nwith the SAML Response
 
 User -> SP: Access SP with SAML Response
 
 SP -> SP: Validate SAML Response\n(Signature, Audience, Issuer, Conditions)
-alt If Assertion is Valid
-    SP -> User: Grant Access to Protected Resource
-else If Assertion is Invalid
-    SP -> User: Deny Access
-end
-
-@enduml
 
 Explanation of the General SAML Authentication Flow
 
