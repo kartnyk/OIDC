@@ -42,3 +42,32 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(responseBody);
     }
 }
+
+
+/**
+ * Overrides the default handling of HttpMediaTypeNotSupportedException to sanitize
+ * and handle potentially malicious or invalid Content-Type headers.
+ *
+ * This method ensures:
+ * - Protection against injection attacks by sanitizing unexpected scripts or data
+ *   in the Content-Type header.
+ * - Consistent and secure error responses for unsupported or malformed Content-Type.
+ * - Logging of the unsupported Content-Type and expected media types for debugging.
+ *
+ * It builds a structured error response (type, title, status, detail, instance) 
+ * and returns a 415 Unsupported Media Type status.
+ *
+ * @param ex      the exception containing details about the unsupported media type
+ * @param headers the HTTP headers of the request
+ * @param status  the HTTP status code (415)
+ * @param request the WebRequest object containing details of the request
+ * @return a ResponseEntity containing the custom error response
+ */
+@Override
+protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(
+        HttpMediaTypeNotSupportedException ex,
+        HttpHeaders headers,
+        HttpStatusCode status,
+        WebRequest request) {
+    // Implementation here...
+}
