@@ -1,3 +1,269 @@
+Here is the complete solution for the SSO registry feature, including the API design, database schema, workflows, and additional details.
+
+
+---
+
+1. Feature Overview
+
+The solution allows:
+
+1. Client registration by TV via DS.
+
+
+2. SAML metadata update after receiving the SAML URL from DP.
+
+
+3. Client details retrieval by TV or DS.
+
+
+
+
+---
+
+2. Database Schema
+
+Single Table: client_registry
+
+
+---
+
+3. API Design
+
+a. Client Registration API
+
+URL: /api/v1/sso/clients/register
+
+Method: POST
+
+Request Body:
+
+{
+  "clientName": "string",
+  "destination": "string",
+  "issuer": "string",
+  "recipient": "string",
+  "audience": "string",
+  "contactEmail": "string"
+}
+
+Response:
+
+{
+  "clientId": "string",
+  "clientSecret": "string"
+}
+
+
+
+---
+
+b. SAML Metadata Update API
+
+URL: /api/v1/sso/clients/{clientId}/update-saml
+
+Method: POST
+
+Request Body:
+
+{
+  "destination": "string",
+  "issuer": "string",
+  "recipient": "string",
+  "audience": "string"
+}
+
+Response:
+
+{
+  "message": "SAML details updated successfully"
+}
+
+
+
+---
+
+c. Fetch Client Details API
+
+URL: /api/v1/sso/clients/{clientId}
+
+Method: GET
+
+Response:
+
+{
+  "clientId": "string",
+  "clientName": "string",
+  "destination": "string",
+  "issuer": "string",
+  "recipient": "string",
+  "audience": "string",
+  "contactEmail": "string"
+}
+
+
+
+---
+
+4. Workflows
+
+1. Client Registration
+
+Request Flow:
+
+1. TV submits client registration details (e.g., clientName, destination, issuer) to DS using the Client Registration API.
+
+
+2. DS generates a clientId and clientSecret.
+
+
+3. DS stores the client details in the client_registry table.
+
+
+
+Request Example:
+
+{
+  "clientName": "Banking App",
+  "destination": "https://banking-app.com/sso/acs",
+  "issuer": "https://idp.example.com",
+  "recipient": "https://banking-app.com/sso/acs",
+  "audience": "https://banking-app.com",
+  "contactEmail": "admin@banking-app.com"
+}
+
+Response Example:
+
+{
+  "clientId": "abc123",
+  "clientSecret": "xyz456"
+}
+
+
+2. SAML Metadata Update
+
+Request Flow:
+
+1. DS receives the SAML metadata (e.g., destination, issuer, recipient) from DP via a manual process.
+
+
+2. DS updates the client’s record in the database using the SAML Metadata Update API.
+
+
+
+Request Example:
+
+{
+  "destination": "https://banking-app.com/sso/acs",
+  "issuer": "https://idp.example.com",
+  "recipient": "https://banking-app.com/sso/acs",
+  "audience": "https://banking-app.com"
+}
+
+Response Example:
+
+{
+  "message": "SAML details updated successfully"
+}
+
+
+3. Fetch Client Details
+
+Request Flow:
+
+1. TV requests client details using the Fetch Client Details API.
+
+
+2. DS retrieves the record from the client_registry table and sends it back to TV.
+
+
+
+Response Example:
+
+{
+  "clientId": "abc123",
+  "clientName": "Banking App",
+  "destination": "https://banking-app.com/sso/acs",
+  "issuer": "https://idp.example.com",
+  "recipient": "https://banking-app.com/sso/acs",
+  "audience": "https://banking-app.com",
+  "contactEmail": "admin@banking-app.com"
+}
+
+
+
+---
+
+5. Key Design Principles
+
+a. Database Design
+
+Single table (client_registry) for simplicity.
+
+Ensure columns like client_id and destination are indexed for fast lookups.
+
+
+b. API Design
+
+Follow RESTful principles:
+
+Clear and meaningful endpoints.
+
+Appropriate HTTP methods (POST for create/update, GET for fetch).
+
+
+Input validation for all API fields (e.g., valid URLs, email formats).
+
+
+c. Security
+
+Encrypt clientSecret before storing in the database.
+
+Use HTTPS for all API communications.
+
+
+d. Scalability
+
+Add pagination for the Fetch Client Details API if the number of clients grows.
+
+Design APIs to allow future extensions (e.g., additional SAML attributes).
+
+
+
+---
+
+6. Future Enhancements
+
+1. Admin Portal:
+
+Build a UI for managing the SSO registry (create, update, delete clients).
+
+
+
+2. Audit Trail:
+
+Add a separate audit_logs table to record changes to client records.
+
+
+
+3. Dynamic Configuration:
+
+Add support for dynamic generation of SAML metadata for clients.
+
+
+
+
+
+---
+
+This solution is modular, scalable, and secure, while meeting all the provided requirements. Let me know if you’d like further refinements!
+
+
+
+
+
+#######№+#++#+#(₹((₹(₹8("(₹
+
+
 Thanks for clarifying! Here's how the solution evolves based on this additional context:
 
 
