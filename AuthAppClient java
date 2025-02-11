@@ -1,0 +1,45 @@
+package com.tst.sd.oidclogin.client;
+
+import com.tst.sd.oidclogin.model.User;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.*;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+
+@Component
+@RequiredArgsConstructor
+public class AuthAppClient {
+
+    private final RestTemplate restTemplate;
+    private static final Logger logger = LoggerFactory.getLogger(AuthAppClient.class);
+    private static final String AUTH_APP_URL = "http://localhost:8081/ad/storeOidcAuth";
+
+    public boolean storeOidcDetails(User user) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<User> requestEntity = new HttpEntity<>(user, headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(
+                    AUTH_APP_URL,
+                    HttpMethod.POST,
+                    requestEntity,
+                    String.class
+            );
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                logger.info("OIDC details saved successfully.");
+                return true;
+            } else {
+                logger.error("Failed to save OIDC details. Status code: {}", response.getStatusCode());
+                return false;
+            }
+        } catch (Exception e) {
+            logger.error("Exception while saving OIDC details: {}", e.getMessage());
+            return false;
+        }
+    }
+}
